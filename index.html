@@ -2,450 +2,564 @@
 <html lang="vi">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kho Học Liệu Số & Đổi Mới - Trường Tiểu học Xuân An</title>
-    <!-- Tailwind CSS CDN (giữ giao diện như bản gốc) -->
-    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#1e3a8a',
-                        secondary: '#2563eb',
-                        accent: '#f59e0b',
-                        emeraldTheme: '#047857',
-                    }
-                }
-            }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kho Học Liệu Số & Đổi Mới - Trường Tiểu học Xuân An</title>
+  <!-- Tailwind CSS CDN (giữ giao diện như bản gốc) -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1e3a8a',
+            secondary: '#2563eb',
+            accent: '#f59e0b',
+            emeraldTheme: '#047857',
+          }
         }
-    </script>
-    <style>
-        :focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
-        .chk:checked + span { text-decoration: line-through; color: #94a3b8; }
-        /* Bắt buộc ẩn phần tử có thuộc tính hidden (Tailwind "flex" đè lên làm không tắt được) */
-        [hidden] { display: none !important; }
-        /* Khung trợ lý không cao quá màn hình, không che thanh tiêu đề */
-        #chat-window { max-height: calc(100vh - 7rem); }
-        #chat-messages { flex: 1 1 auto; min-height: 8rem; }
-    </style>
+      }
+    }
+  </script>
+  <style>
+    :focus-visible {
+      outline: 3px solid #f59e0b;
+      outline-offset: 2px;
+    }
+
+    .chk:checked+span {
+      text-decoration: line-through;
+      color: #94a3b8;
+    }
+
+    /* Bắt buộc ẩn phần tử có thuộc tính hidden (Tailwind "flex" đè lên làm không tắt được) */
+    [hidden] {
+      display: none !important;
+    }
+
+    /* Khung trợ lý không cao quá màn hình, không che thanh tiêu đề */
+    #chat-window {
+      max-height: calc(100vh - 7rem);
+    }
+
+    #chat-messages {
+      flex: 1 1 auto;
+      min-height: 8rem;
+    }
+  </style>
 </head>
 
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col relative">
 
-    <!-- Header / Navigation -->
-    <header class="bg-[#1e3a8a] text-white shadow-lg sticky top-0 z-40">
-        <div class="container mx-auto px-4 md:px-6 py-4 flex flex-wrap justify-between items-center gap-y-3">
-            <div class="flex items-center space-x-3">
-                <div class="bg-white p-2.5 rounded-xl text-[#1e3a8a] font-bold text-2xl shadow-md">
-                    <i class="fa-solid fa-graduation-cap"></i>
-                </div>
-                <div>
-                    <h1 class="text-lg md:text-xl font-extrabold uppercase tracking-wide">Trường Tiểu học Xuân An</h1>
-                    <p class="text-xs text-blue-200 font-medium">Kho Học Liệu Số, Trò Chơi & AI (Môn Tiếng Anh & Tin học)</p>
-                </div>
-            </div>
-            <nav class="grid grid-cols-3 gap-2 w-full lg:w-auto lg:flex lg:space-x-1" role="tablist">
-                <button data-go="giao-vien" id="btn-giao-vien" role="tab"
-                    class="tab-btn px-3 md:px-5 py-2.5 rounded-xl font-bold transition flex items-center justify-center text-sm md:text-base">
-                    <i class="fa-solid fa-chalkboard-user mr-2"></i><span class="hidden sm:inline">Dành cho&nbsp;</span>Giáo viên
-                </button>
-                <button data-go="hoc-sinh" id="btn-hoc-sinh" role="tab"
-                    class="tab-btn px-3 md:px-5 py-2.5 rounded-xl font-bold transition flex items-center justify-center text-sm md:text-base">
-                    <i class="fa-solid fa-children mr-2"></i><span class="hidden sm:inline">Dành cho&nbsp;</span>Học sinh
-                </button>
-                <button data-go="phu-huynh" id="btn-phu-huynh" role="tab"
-                    class="tab-btn px-3 md:px-5 py-2.5 rounded-xl font-bold transition flex items-center justify-center text-sm md:text-base">
-                    <i class="fa-solid fa-people-roof mr-2"></i><span class="hidden sm:inline">Dành cho&nbsp;</span>Phụ huynh
-                </button>
-            </nav>
+  <!-- Header / Navigation -->
+  <header class="bg-[#1e3a8a] text-white shadow-lg sticky top-0 z-40">
+    <div class="container mx-auto px-4 md:px-6 py-4 flex flex-wrap justify-between items-center gap-y-3">
+      <div class="flex items-center space-x-3">
+        <div class="bg-white p-2.5 rounded-xl text-[#1e3a8a] font-bold text-2xl shadow-md">
+          <i class="fa-solid fa-graduation-cap"></i>
         </div>
-    </header>
-
-    <!-- Main Content Area -->
-    <main class="container mx-auto px-4 md:px-6 py-8 flex-grow">
-
-        <!-- ================= TAB 1: GIÁO VIÊN ================= -->
-        <section id="giao-vien" class="space-y-6">
-            <div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white p-6 md:p-8 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-center border border-blue-800/50">
-                <div class="space-y-2">
-                    <span class="bg-blue-600/50 text-blue-200 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Hệ thống giáo viên đổi mới</span>
-                    <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight"><i class="fa-solid fa-laptop-code mr-2 text-accent"></i>Kho Giáo Án & Trò Chơi Số (<a href="https://giaoviendoimoi.com" target="_blank" rel="noopener" class="underline hover:text-amber-300">giaoviendoimoi.com</a>)</h2>
-                    <p class="text-blue-100 text-sm max-w-2xl leading-relaxed">Nơi lưu trữ, chia sẻ kế hoạch bài dạy điện tử Tiếng Anh (Global Success), Tin học Khối 3, 4, 5 & AI cùng kho trò chơi tương tác đổi mới, tích hợp Google Drive và <a href="https://giaoviendoimoi.com" target="_blank" rel="noopener" class="underline text-amber-300 font-semibold">giaoviendoimoi.com</a>.</p>
-                </div>
-                <button id="btn-gui"
-                    class="mt-6 md:mt-0 bg-accent hover:bg-amber-600 text-white px-6 py-3 rounded-2xl font-bold shadow-lg transition flex items-center transform hover:scale-105 flex-none">
-                    <i class="fa-solid fa-cloud-arrow-up mr-2 text-lg"></i> Đóng góp Bài giảng / Trò chơi
-                </button>
-            </div>
-
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-wrap gap-4 items-center justify-between">
-                <div class="flex flex-wrap gap-2 items-center" data-filter="gv-mon">
-                    <span class="text-sm font-bold text-slate-500 mr-2"><i class="fa-solid fa-filter text-primary mr-1"></i> Bộ môn:</span>
-                    <button data-val="all" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Tất cả</button>
-                    <button data-val="Tiếng Anh" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Tiếng Anh (Global Success)</button>
-                    <button data-val="Tin học" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Tin học (Khối 3, 4, 5) & AI</button>
-                </div>
-                <div class="flex flex-wrap gap-2 items-center" data-filter="gv-loai">
-                    <span class="text-sm font-bold text-slate-500 mr-2">Phân loại:</span>
-                    <button data-val="all" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Tất cả</button>
-                    <button data-val="Bài giảng" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">📚 Bài giảng</button>
-                    <button data-val="Trò chơi" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">🎮 Trò chơi đổi mới</button>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="grid-gv" aria-live="polite"></div>
-        </section>
-
-        <!-- ================= TAB 2: HỌC SINH ================= -->
-        <section id="hoc-sinh" class="space-y-6" hidden>
-            <div class="bg-gradient-to-r from-emerald-800 to-teal-700 text-white p-6 md:p-8 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-center border border-emerald-700/50">
-                <div class="space-y-2">
-                    <span class="bg-emerald-600/50 text-emerald-100 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Không gian trải nghiệm số</span>
-                    <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight"><i class="fa-solid fa-rocket mr-2 text-accent"></i>Góc Học Tập Số (Dành cho Khối 3, 4, 5)</h2>
-                    <p class="text-emerald-100 text-sm max-w-2xl leading-relaxed">Kho tài liệu, trò chơi tương tác Tiếng Anh Global Success và các dự án bài tập Scratch do học sinh Khối 4, 5 Tiểu học Xuân An tự tay lập trình và sáng tạo.</p>
-                </div>
-                <div class="mt-6 md:mt-0 bg-white/10 px-5 py-2 rounded-2xl border border-white/20 text-sm font-bold flex items-center shadow-md flex-none">
-                    <i class="fa-solid fa-school mr-2 text-accent text-lg"></i> Trường Tiểu học Xuân An - Thân thiện & Sáng tạo
-                </div>
-            </div>
-
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-wrap gap-4 items-center justify-between">
-                <div class="flex flex-wrap gap-2 items-center" data-filter="hs-khoi">
-                    <span class="text-sm font-bold text-slate-500 mr-2"><i class="fa-solid fa-layer-group text-emerald-700 mr-1"></i> Khối lớp:</span>
-                    <button data-val="all" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Tất cả Khối 3-4-5</button>
-                    <button data-val="3" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Khối 3</button>
-                    <button data-val="4" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Khối 4</button>
-                    <button data-val="5" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Khối 5</button>
-                </div>
-                <div class="flex flex-wrap gap-2 items-center" data-filter="hs-mon">
-                    <span class="text-sm font-bold text-slate-500 mr-2">Môn:</span>
-                    <button data-val="all" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Tất cả</button>
-                    <button data-val="Tiếng Anh" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">🇬🇧 Tiếng Anh</button>
-                    <button data-val="Tin học" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">💻 Tin học & Scratch</button>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="grid-hs" aria-live="polite"></div>
-        </section>
-
-        <!-- ================= TAB 3: PHỤ HUYNH ================= -->
-        <section id="phu-huynh" class="space-y-6" hidden>
-            <div class="bg-gradient-to-r from-purple-800 to-indigo-800 text-white p-6 md:p-8 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-center border border-purple-700/50">
-                <div class="space-y-2">
-                    <span class="bg-purple-600/50 text-purple-100 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Kết nối gia đình - nhà trường</span>
-                    <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight"><i class="fa-solid fa-house-chimney-user mr-2 text-accent"></i>Góc Phụ Huynh - Đồng hành cùng con</h2>
-                    <p class="text-purple-100 text-sm max-w-2xl leading-relaxed">Xem con học gì trong tuần, đánh dấu việc con đã làm ở nhà và liên hệ thầy cô khi cần.</p>
-                </div>
-            </div>
-
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-wrap gap-2 items-center" data-filter="ph-khoi">
-                <span class="text-sm font-bold text-slate-500 mr-2"><i class="fa-solid fa-child text-purple-700 mr-1"></i> Con học:</span>
-                <button data-val="3" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Khối 3</button>
-                <button data-val="4" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Khối 4</button>
-                <button data-val="5" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Khối 5</button>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6">
-                    <h3 class="font-bold text-lg text-slate-800"><i class="fa-solid fa-calendar-week text-purple-700 mr-2"></i>Tuần này con học gì</h3>
-                    <p class="text-sm text-slate-500 mt-1 mb-4" id="week-label"></p>
-                    <div class="space-y-3" id="week-box"></div>
-                    <div class="mt-5 pt-4 border-t border-slate-100 flex flex-wrap gap-2" id="week-actions"></div>
-                </div>
-
-                <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6">
-                    <h3 class="font-bold text-lg text-slate-800"><i class="fa-solid fa-list-check text-purple-700 mr-2"></i>Phiếu theo dõi ở nhà</h3>
-                    <p class="text-sm text-slate-500 mt-1 mb-4">Phụ huynh đánh dấu khi con hoàn thành. Phiếu chỉ lưu trên thiết bị này, tự làm mới mỗi tuần.</p>
-                    <ul class="space-y-2" id="checklist"></ul>
-                    <div class="h-2.5 bg-purple-100 rounded-full overflow-hidden mt-4"><div id="bar" class="h-full bg-purple-700 transition-all" style="width:0"></div></div>
-                    <div class="mt-3 flex justify-between items-center gap-2 flex-wrap">
-                        <p class="text-sm font-semibold text-slate-600" id="progress-text"></p>
-                        <button id="btn-reset" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold text-sm transition"><i class="fa-solid fa-rotate-left mr-1"></i> Làm lại phiếu</button>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6">
-                    <h3 class="font-bold text-lg text-slate-800 mb-3"><i class="fa-solid fa-shield-halved text-emerald-700 mr-2"></i>Giúp con dùng mạng an toàn</h3>
-                    <ul class="space-y-2.5 text-sm text-slate-600 leading-relaxed">
-                        <li><i class="fa-solid fa-check text-emerald-600 mr-2"></i>Cho con dùng máy ở phòng chung, không mang vào phòng riêng.</li>
-                        <li><i class="fa-solid fa-check text-emerald-600 mr-2"></i>Thời gian dùng máy mỗi ngày nên dưới 1 giờ, nghỉ mắt sau mỗi 20 phút.</li>
-                        <li><i class="fa-solid fa-check text-emerald-600 mr-2"></i>Dặn con không gửi tên, địa chỉ, ảnh, số điện thoại cho người lạ.</li>
-                        <li><i class="fa-solid fa-check text-emerald-600 mr-2"></i>Trang cần tài khoản (Canva, Duolingo, IOE…) phụ huynh đăng ký và đăng nhập giúp con.</li>
-                        <li><i class="fa-solid fa-check text-emerald-600 mr-2"></i>Nếu con gặp tin nhắn, hình ảnh lạ hoặc bị trêu chọc trên mạng, hãy bình tĩnh nghe con kể và báo thầy cô.</li>
-                    </ul>
-                </div>
-
-                <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6">
-                    <h3 class="font-bold text-lg text-slate-800 mb-1"><i class="fa-solid fa-phone text-blue-700 mr-2"></i>Liên hệ thầy cô</h3>
-                    <p class="text-sm text-slate-500 mb-4">Tham gia nhóm Zalo của khối để nhận thông báo bài tập.</p>
-                    <div id="contact-box"></div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- ================= TRỢ LÝ ẢO ================= -->
-    <div id="ai-chatbot-widget" class="fixed bottom-6 right-4 md:right-6 z-50">
-        <button id="chat-toggle-btn" aria-expanded="false" aria-label="Mở trợ lý"
-            class="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-2xl transition transform hover:scale-110 relative border-2 border-white">
-            <i class="fa-solid fa-robot"></i>
-            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow">AI</span>
+        <div>
+          <h1 class="text-lg md:text-xl font-extrabold uppercase tracking-wide">Trường Tiểu học Xuân An</h1>
+          <p class="text-xs text-blue-200 font-medium">Kho Học Liệu Số, Trò Chơi & AI (Môn Tiếng Anh & Tin học)</p>
+        </div>
+      </div>
+      <nav class="grid grid-cols-3 gap-2 w-full lg:w-auto lg:flex lg:space-x-1" role="tablist">
+        <button data-go="giao-vien" id="btn-giao-vien" role="tab"
+          class="tab-btn px-3 md:px-5 py-2.5 rounded-xl font-bold transition flex items-center justify-center text-sm md:text-base">
+          <i class="fa-solid fa-chalkboard-user mr-2"></i><span class="hidden sm:inline">Dành cho&nbsp;</span>Giáo viên
         </button>
-
-        <div id="chat-window" hidden
-            class="bg-white w-[calc(100vw-2rem)] max-w-sm md:w-96 rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col absolute bottom-20 right-0">
-            <div class="bg-gradient-to-r from-blue-700 to-teal-600 text-white p-4 flex justify-between items-center shadow-md">
-                <div class="flex items-center space-x-2.5">
-                    <div class="bg-white/20 p-2 rounded-xl text-amber-300 text-lg"><i class="fa-solid fa-robot"></i></div>
-                    <div>
-                        <h4 class="font-extrabold text-sm tracking-wide">Trợ lý ảo Xuân An AI</h4>
-                        <p class="text-[11px] text-blue-100 flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-400 inline-block mr-1.5"></span>Trả lời tự động theo kho học liệu</p>
-                    </div>
-                </div>
-                <button id="chat-close" aria-label="Đóng trợ lý"
-                    class="text-white/80 hover:text-white text-lg w-8 h-8 rounded-full bg-white/10 flex items-center justify-center transition">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <div id="chat-messages" class="p-4 h-72 overflow-y-auto space-y-3 bg-slate-50 text-sm" aria-live="polite"></div>
-
-            <div id="quick" class="px-3 py-2 bg-slate-100 border-t border-slate-200 flex gap-1.5 overflow-x-auto text-xs"></div>
-
-            <form id="chat-form" class="p-3 bg-white border-t border-slate-200 flex items-center space-x-2">
-                <input type="text" id="chat-input" autocomplete="off" aria-label="Câu hỏi"
-                    class="flex-grow min-w-0 px-3.5 py-2.5 bg-slate-100 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 text-base md:text-sm font-medium"
-                    placeholder="Nhập câu hỏi của bạn...">
-                <button type="submit" aria-label="Gửi"
-                    class="bg-blue-600 hover:bg-blue-700 text-white w-10 h-10 rounded-xl flex items-center justify-center transition shadow-md flex-none">
-                    <i class="fa-solid fa-paper-plane text-xs"></i>
-                </button>
-            </form>
-        </div>
+        <button data-go="hoc-sinh" id="btn-hoc-sinh" role="tab"
+          class="tab-btn px-3 md:px-5 py-2.5 rounded-xl font-bold transition flex items-center justify-center text-sm md:text-base">
+          <i class="fa-solid fa-children mr-2"></i><span class="hidden sm:inline">Dành cho&nbsp;</span>Học sinh
+        </button>
+        <button data-go="phu-huynh" id="btn-phu-huynh" role="tab"
+          class="tab-btn px-3 md:px-5 py-2.5 rounded-xl font-bold transition flex items-center justify-center text-sm md:text-base">
+          <i class="fa-solid fa-people-roof mr-2"></i><span class="hidden sm:inline">Dành cho&nbsp;</span>Phụ huynh
+        </button>
+      </nav>
     </div>
+  </header>
 
-    <!-- Hộp thông báo khi chưa cấu hình Google Form -->
-    <div id="uploadModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative border border-slate-100">
-            <button id="modal-close" aria-label="Đóng" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center transition"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="text-lg font-extrabold text-[#1e3a8a] mb-3 flex items-center"><i class="fa-solid fa-cloud-arrow-up mr-2 text-accent text-xl"></i> Đóng góp Bài giảng / Trò chơi</h3>
-            <p class="text-sm text-slate-600 mb-2">Biểu mẫu nhận học liệu chưa được bật. Quản trị viên làm như sau:</p>
-            <ol class="list-decimal pl-5 text-sm text-slate-500 space-y-1">
-                <li>Tạo Google Form: tên bài, môn, khối, loại, mô tả, mục "Tải tệp lên" hoặc dán link.</li>
-                <li>Bấm Gửi → biểu tượng liên kết → sao chép link.</li>
-                <li>Dán link vào dòng <b>formGuiHocLieu</b> trong phần CẤU HÌNH của tệp index.html.</li>
-            </ol>
-            <div class="flex justify-end pt-4"><button id="modal-ok" class="px-6 py-2 bg-primary hover:bg-blue-800 text-white rounded-xl font-bold text-sm shadow-md transition">Đã hiểu</button></div>
+  <!-- Main Content Area -->
+  <main class="container mx-auto px-4 md:px-6 py-8 flex-grow">
+
+    <!-- ================= TAB 1: GIÁO VIÊN ================= -->
+    <section id="giao-vien" class="space-y-6">
+      <div
+        class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white p-6 md:p-8 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-center border border-blue-800/50">
+        <div class="space-y-2">
+          <span
+            class="bg-blue-600/50 text-blue-200 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Hệ
+            thống giáo viên đổi mới</span>
+          <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight"><i
+              class="fa-solid fa-laptop-code mr-2 text-accent"></i>Kho Giáo Án & Trò Chơi Số (<a
+              href="https://giaoviendoimoi.com" target="_blank" rel="noopener"
+              class="underline hover:text-amber-300">giaoviendoimoi.com</a>)</h2>
+          <p class="text-blue-100 text-sm max-w-2xl leading-relaxed">Nơi lưu trữ, chia sẻ kế hoạch bài dạy điện tử Tiếng
+            Anh (Global Success), Tin học Khối 3, 4, 5 & AI cùng kho trò chơi tương tác đổi mới, tích hợp Google Drive
+            và <a href="https://giaoviendoimoi.com" target="_blank" rel="noopener"
+              class="underline text-amber-300 font-semibold">giaoviendoimoi.com</a>.</p>
         </div>
+        <button id="btn-gui"
+          class="mt-6 md:mt-0 bg-accent hover:bg-amber-600 text-white px-6 py-3 rounded-2xl font-bold shadow-lg transition flex items-center transform hover:scale-105 flex-none">
+          <i class="fa-solid fa-cloud-arrow-up mr-2 text-lg"></i> Đóng góp Bài giảng / Trò chơi
+        </button>
+      </div>
+
+      <div
+        class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-wrap gap-4 items-center justify-between">
+        <div class="flex flex-wrap gap-2 items-center" data-filter="gv-mon">
+          <span class="text-sm font-bold text-slate-500 mr-2"><i class="fa-solid fa-filter text-primary mr-1"></i> Bộ
+            môn:</span>
+          <button data-val="all" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Tất cả</button>
+          <button data-val="Tiếng Anh" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Tiếng Anh (Global
+            Success)</button>
+          <button data-val="Tin học" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Tin học (Khối 3, 4,
+            5) & AI</button>
+        </div>
+        <div class="flex flex-wrap gap-2 items-center" data-filter="gv-loai">
+          <span class="text-sm font-bold text-slate-500 mr-2">Phân loại:</span>
+          <button data-val="all" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Tất cả</button>
+          <button data-val="Bài giảng" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">📚 Bài
+            giảng</button>
+          <button data-val="Trò chơi" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">🎮 Trò chơi đổi
+            mới</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="grid-gv" aria-live="polite"></div>
+    </section>
+
+    <!-- ================= TAB 2: HỌC SINH ================= -->
+    <section id="hoc-sinh" class="space-y-6" hidden>
+      <div
+        class="bg-gradient-to-r from-emerald-800 to-teal-700 text-white p-6 md:p-8 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-center border border-emerald-700/50">
+        <div class="space-y-2">
+          <span
+            class="bg-emerald-600/50 text-emerald-100 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Không
+            gian trải nghiệm số</span>
+          <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight"><i
+              class="fa-solid fa-rocket mr-2 text-accent"></i>Góc Học Tập Số (Dành cho Khối 3, 4, 5)</h2>
+          <p class="text-emerald-100 text-sm max-w-2xl leading-relaxed">Kho tài liệu, trò chơi tương tác Tiếng Anh
+            Global Success và các dự án bài tập Scratch do học sinh Khối 4, 5 Tiểu học Xuân An tự tay lập trình và sáng
+            tạo.</p>
+        </div>
+        <div
+          class="mt-6 md:mt-0 bg-white/10 px-5 py-2 rounded-2xl border border-white/20 text-sm font-bold flex items-center shadow-md flex-none">
+          <i class="fa-solid fa-school mr-2 text-accent text-lg"></i> Trường Tiểu học Xuân An - Thân thiện & Sáng tạo
+        </div>
+      </div>
+
+      <div
+        class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-wrap gap-4 items-center justify-between">
+        <div class="flex flex-wrap gap-2 items-center" data-filter="hs-khoi">
+          <span class="text-sm font-bold text-slate-500 mr-2"><i
+              class="fa-solid fa-layer-group text-emerald-700 mr-1"></i> Khối lớp:</span>
+          <button data-val="all" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Tất cả Khối
+            3-4-5</button>
+          <button data-val="3" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Khối 3</button>
+          <button data-val="4" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Khối 4</button>
+          <button data-val="5" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Khối 5</button>
+        </div>
+        <div class="flex flex-wrap gap-2 items-center" data-filter="hs-mon">
+          <span class="text-sm font-bold text-slate-500 mr-2">Môn:</span>
+          <button data-val="all" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Tất cả</button>
+          <button data-val="Tiếng Anh" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">🇬🇧 Tiếng
+            Anh</button>
+          <button data-val="Tin học" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">💻 Tin học &
+            Scratch</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="grid-hs" aria-live="polite"></div>
+    </section>
+
+    <!-- ================= TAB 3: PHỤ HUYNH ================= -->
+    <section id="phu-huynh" class="space-y-6" hidden>
+      <div
+        class="bg-gradient-to-r from-purple-800 to-indigo-800 text-white p-6 md:p-8 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-center border border-purple-700/50">
+        <div class="space-y-2">
+          <span
+            class="bg-purple-600/50 text-purple-100 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Kết
+            nối gia đình - nhà trường</span>
+          <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight"><i
+              class="fa-solid fa-house-chimney-user mr-2 text-accent"></i>Góc Phụ Huynh - Đồng hành cùng con</h2>
+          <p class="text-purple-100 text-sm max-w-2xl leading-relaxed">Xem con học gì trong tuần, đánh dấu việc con đã
+            làm ở nhà và liên hệ thầy cô khi cần.</p>
+        </div>
+      </div>
+
+      <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-wrap gap-2 items-center"
+        data-filter="ph-khoi">
+        <span class="text-sm font-bold text-slate-500 mr-2"><i class="fa-solid fa-child text-purple-700 mr-1"></i> Con
+          học:</span>
+        <button data-val="3" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Khối 3</button>
+        <button data-val="4" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Khối 4</button>
+        <button data-val="5" class="chip px-4 py-2 rounded-xl text-sm font-bold transition">Khối 5</button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6">
+          <h3 class="font-bold text-lg text-slate-800"><i
+              class="fa-solid fa-calendar-week text-purple-700 mr-2"></i>Tuần này con học gì</h3>
+          <p class="text-sm text-slate-500 mt-1 mb-4" id="week-label"></p>
+          <div class="space-y-3" id="week-box"></div>
+          <div class="mt-5 pt-4 border-t border-slate-100 flex flex-wrap gap-2" id="week-actions"></div>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6">
+          <h3 class="font-bold text-lg text-slate-800"><i class="fa-solid fa-list-check text-purple-700 mr-2"></i>Phiếu
+            theo dõi ở nhà</h3>
+          <p class="text-sm text-slate-500 mt-1 mb-4">Phụ huynh đánh dấu khi con hoàn thành. Phiếu chỉ lưu trên thiết bị
+            này, tự làm mới mỗi tuần.</p>
+          <ul class="space-y-2" id="checklist"></ul>
+          <div class="h-2.5 bg-purple-100 rounded-full overflow-hidden mt-4">
+            <div id="bar" class="h-full bg-purple-700 transition-all" style="width:0"></div>
+          </div>
+          <div class="mt-3 flex justify-between items-center gap-2 flex-wrap">
+            <p class="text-sm font-semibold text-slate-600" id="progress-text"></p>
+            <button id="btn-reset"
+              class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold text-sm transition"><i
+                class="fa-solid fa-rotate-left mr-1"></i> Làm lại phiếu</button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6">
+          <h3 class="font-bold text-lg text-slate-800 mb-3"><i
+              class="fa-solid fa-shield-halved text-emerald-700 mr-2"></i>Giúp con dùng mạng an toàn</h3>
+          <ul class="space-y-2.5 text-sm text-slate-600 leading-relaxed">
+            <li><i class="fa-solid fa-check text-emerald-600 mr-2"></i>Cho con dùng máy ở phòng chung, không mang vào
+              phòng riêng.</li>
+            <li><i class="fa-solid fa-check text-emerald-600 mr-2"></i>Thời gian dùng máy mỗi ngày nên dưới 1 giờ, nghỉ
+              mắt sau mỗi 20 phút.</li>
+            <li><i class="fa-solid fa-check text-emerald-600 mr-2"></i>Dặn con không gửi tên, địa chỉ, ảnh, số điện
+              thoại cho người lạ.</li>
+            <li><i class="fa-solid fa-check text-emerald-600 mr-2"></i>Trang cần tài khoản (Canva, Duolingo, IOE…) phụ
+              huynh đăng ký và đăng nhập giúp con.</li>
+            <li><i class="fa-solid fa-check text-emerald-600 mr-2"></i>Nếu con gặp tin nhắn, hình ảnh lạ hoặc bị trêu
+              chọc trên mạng, hãy bình tĩnh nghe con kể và báo thầy cô.</li>
+          </ul>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6">
+          <h3 class="font-bold text-lg text-slate-800 mb-1"><i class="fa-solid fa-phone text-blue-700 mr-2"></i>Liên hệ
+            thầy cô</h3>
+          <p class="text-sm text-slate-500 mb-4">Tham gia nhóm Zalo của khối để nhận thông báo bài tập.</p>
+          <div id="contact-box"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= TRỢ LÝ ẢO ================= -->
+  <div id="ai-chatbot-widget" class="fixed bottom-6 right-4 md:right-6 z-50">
+    <button id="chat-toggle-btn" aria-expanded="false" aria-label="Mở trợ lý"
+      class="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-2xl transition transform hover:scale-110 relative border-2 border-white">
+      <i class="fa-solid fa-robot"></i>
+      <span
+        class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow">AI</span>
+    </button>
+
+    <div id="chat-window" hidden
+      class="bg-white w-[calc(100vw-2rem)] max-w-sm md:w-96 rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col absolute bottom-20 right-0">
+      <div
+        class="bg-gradient-to-r from-blue-700 to-teal-600 text-white p-4 flex justify-between items-center shadow-md">
+        <div class="flex items-center space-x-2.5">
+          <div class="bg-white/20 p-2 rounded-xl text-amber-300 text-lg"><i class="fa-solid fa-robot"></i></div>
+          <div>
+            <h4 class="font-extrabold text-sm tracking-wide">Trợ lý ảo Xuân An AI</h4>
+            <p class="text-[11px] text-blue-100 flex items-center"><span
+                class="w-2 h-2 rounded-full bg-emerald-400 inline-block mr-1.5"></span>Trả lời tự động theo kho học liệu
+            </p>
+          </div>
+        </div>
+        <button id="chat-close" aria-label="Đóng trợ lý"
+          class="text-white/80 hover:text-white text-lg w-8 h-8 rounded-full bg-white/10 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div id="chat-messages" class="p-4 h-72 overflow-y-auto space-y-3 bg-slate-50 text-sm" aria-live="polite"></div>
+
+      <div id="quick" class="px-3 py-2 bg-slate-100 border-t border-slate-200 flex gap-1.5 overflow-x-auto text-xs">
+      </div>
+
+      <form id="chat-form" class="p-3 bg-white border-t border-slate-200 flex items-center space-x-2">
+        <input type="text" id="chat-input" autocomplete="off" aria-label="Câu hỏi"
+          class="flex-grow min-w-0 px-3.5 py-2.5 bg-slate-100 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 text-base md:text-sm font-medium"
+          placeholder="Nhập câu hỏi của bạn...">
+        <button type="submit" aria-label="Gửi"
+          class="bg-blue-600 hover:bg-blue-700 text-white w-10 h-10 rounded-xl flex items-center justify-center transition shadow-md flex-none">
+          <i class="fa-solid fa-paper-plane text-xs"></i>
+        </button>
+      </form>
     </div>
+  </div>
 
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-slate-400 py-8 mt-16 border-t border-slate-800">
-        <div class="container mx-auto px-6 text-center text-sm space-y-2 pb-14 md:pb-0">
-            <p class="font-bold text-slate-300">Trường Tiểu học Xuân An - Phường Hàm Thắng - Tỉnh Lâm Đồng</p>
-            <p class="font-bold text-slate-300">Giáo viên thực hiện: Nguyễn Thị Mai Quỳnh</p>
-            <p class="text-xs text-slate-500">Sản phẩm phục vụ Ngày hội "Nhà giáo sáng tạo với công nghệ số và trí tuệ nhân tạo năm 2026"</p>
-        </div>
-    </footer>
+  <!-- Hộp thông báo khi chưa cấu hình Google Form -->
+  <div id="uploadModal"
+    class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative border border-slate-100">
+      <button id="modal-close" aria-label="Đóng"
+        class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center transition"><i
+          class="fa-solid fa-xmark"></i></button>
+      <h3 class="text-lg font-extrabold text-[#1e3a8a] mb-3 flex items-center"><i
+          class="fa-solid fa-cloud-arrow-up mr-2 text-accent text-xl"></i> Đóng góp Bài giảng / Trò chơi</h3>
+      <p class="text-sm text-slate-600 mb-2">Biểu mẫu nhận học liệu chưa được bật. Quản trị viên làm như sau:</p>
+      <ol class="list-decimal pl-5 text-sm text-slate-500 space-y-1">
+        <li>Tạo Google Form: tên bài, môn, khối, loại, mô tả, mục "Tải tệp lên" hoặc dán link.</li>
+        <li>Bấm Gửi → biểu tượng liên kết → sao chép link.</li>
+        <li>Dán link vào dòng <b>formGuiHocLieu</b> trong phần CẤU HÌNH của tệp index.html.</li>
+      </ol>
+      <div class="flex justify-end pt-4"><button id="modal-ok"
+          class="px-6 py-2 bg-primary hover:bg-blue-800 text-white rounded-xl font-bold text-sm shadow-md transition">Đã
+          hiểu</button></div>
+    </div>
+  </div>
 
-<script>
-/* =====================================================================
-   CẤU HÌNH – THẦY CÔ CHỈ CẦN SỬA PHẦN NÀY
-   - Link để trống "" thì hiện "Đang cập nhật" (không dẫn sai chỗ).
-   - Scratch: mở dự án → bấm "Chia sẻ" → dán link dạng
-     https://scratch.mit.edu/projects/123456789
-   ===================================================================== */
-const CAU_HINH = {
-  formGuiHocLieu: "",   // Link Google Form nhận học liệu của GV
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-400 py-8 mt-16 border-t border-slate-800">
+    <div class="container mx-auto px-6 text-center text-sm space-y-2 pb-14 md:pb-0">
+      <p class="font-bold text-slate-300">Trường Tiểu học Xuân An - Phường Hàm Thắng - Tỉnh Lâm Đồng</p>
+      <p class="font-bold text-slate-300">Giáo viên thực hiện: Nguyễn Thị Mai Quỳnh</p>
+      <p class="text-xs text-slate-500">"Giải thưởng Tiên phong Ứng dụng AI trong Giáo dục Việt Nam 2026"</p>
+    </div>
+  </footer>
 
-  zalo: { "3": "", "4": "", "5": "" },   // Link nhóm Zalo từng khối
+  <script>
+    /* =====================================================================
+       CẤU HÌNH – THẦY CÔ CHỈ CẦN SỬA PHẦN NÀY
+       - Link để trống "" thì hiện "Đang cập nhật" (không dẫn sai chỗ).
+       - Scratch: mở dự án → bấm "Chia sẻ" → dán link dạng
+         https://scratch.mit.edu/projects/123456789
+       ===================================================================== */
+    const CAU_HINH = {
+      formGuiHocLieu: "",   // Link Google Form nhận học liệu của GV
 
-  /* Nội dung tuần – cập nhật mỗi thứ Hai (đây là NỘI DUNG MẪU, cần sửa) */
-  tuanNay: {
-    nhan: "Tuần 8 (19/10 – 23/10/2026)",
-    "3": { tinHoc: "Làm quen với chuột máy tính, tập nháy và kéo thả chuột.",
-           tiengAnh: "Unit 4: từ vựng về các bộ phận cơ thể.",
-           baiTapNha: "Luyện gõ phím 10 phút trên tapdanhmay.vn.",
-           linkBaiTap: "https://tapdanhmay.vn/" },
-    "4": { tinHoc: "Lập trình Scratch: làm nhân vật di chuyển bằng phím mũi tên.",
-           tiengAnh: "Unit 4: hỏi và trả lời về ngày sinh nhật.",
-           baiTapNha: "Hoàn thiện nhân vật Scratch đã làm trên lớp.",
-           linkBaiTap: "https://scratch.mit.edu/" },
-    "5": { tinHoc: "An toàn trên mạng: đặt mật khẩu mạnh, không chia sẻ thông tin cá nhân.",
-           tiengAnh: "Unit 4: từ vựng về hoạt động ở trường.",
-           baiTapNha: "Ôn từ vựng Unit 4 trên hoclieu.vn.",
-           linkBaiTap: "https://hoclieu.vn/" }
-  },
+      zalo: { "3": "", "4": "", "5": "" },   // Link nhóm Zalo từng khối
 
-  phieuTheoDoi: [
-    "Con làm xong bài tập về nhà của tuần",
-    "Con luyện gõ phím hoặc ôn từ vựng ít nhất 3 buổi",
-    "Con kể cho bố mẹ nghe một điều mới học được",
-    "Thời gian dùng máy mỗi ngày dưới 1 giờ",
-    "Con không chia sẻ thông tin cá nhân trên mạng"
-  ],
+      /* Nội dung tuần – cập nhật mỗi thứ Hai (đây là NỘI DUNG MẪU, cần sửa) */
+      tuanNay: {
+        nhan: "Tuần 8 (19/10 – 23/10/2026)",
+        "3": {
+          tinHoc: "Làm quen với chuột máy tính, tập nháy và kéo thả chuột.",
+          tiengAnh: "Unit 4: từ vựng về các bộ phận cơ thể.",
+          baiTapNha: "Luyện gõ phím 10 phút trên tapdanhmay.vn.",
+          linkBaiTap: "https://tapdanhmay.vn/"
+        },
+        "4": {
+          tinHoc: "Lập trình Scratch: làm nhân vật di chuyển bằng phím mũi tên.",
+          tiengAnh: "Unit 4: hỏi và trả lời về ngày sinh nhật.",
+          baiTapNha: "Hoàn thiện nhân vật Scratch đã làm trên lớp.",
+          linkBaiTap: "https://scratch.mit.edu/"
+        },
+        "5": {
+          tinHoc: "An toàn trên mạng: đặt mật khẩu mạnh, không chia sẻ thông tin cá nhân.",
+          tiengAnh: "Unit 4: từ vựng về hoạt động ở trường.",
+          baiTapNha: "Ôn từ vựng Unit 4 trên hoclieu.vn.",
+          linkBaiTap: "https://hoclieu.vn/"
+        }
+      },
 
-  /* Học liệu giáo viên – nguon: chữ nhỏ ở góc dưới trái thẻ */
-  giaoVien: [
-    { mon:"Tiếng Anh", loai:"Bài giảng", ten:"Giáo án điện tử Global Success Lớp 5",
-      mota:"Được thiết kế chuẩn đổi mới phương pháp, tích hợp hình ảnh minh họa Canva AI và audio phát âm chuẩn.",
-      tacGia:"", nguon:"Sách trực tuyến",
-      links:[{nhan:"Truy cập hoclieu.vn", url:"https://hoclieu.vn/"}] },
-    { mon:"Tin học", loai:"Bài giảng", nhanLoai:"Bài giảng Khối 3", ten:"Giáo án điện tử Tin học Khối 3",
-      tacGia:"Cô Nguyễn Thị Mai Quỳnh", nguon:"Google Drive Khối 3", drive:true,
-      links:[{nhan:"Mở Google Drive", url:"https://drive.google.com/drive/folders/1QNkC_4xb5M7Wjcku-KGcTpeYvat84use?usp=sharing"}] },
-    { mon:"Tin học", loai:"Bài giảng", nhanLoai:"Bài giảng Khối 4", ten:"Giáo án điện tử Tin học Khối 4",
-      tacGia:"Cô Nguyễn Thị Mai Quỳnh", nguon:"Google Drive Khối 4", drive:true,
-      links:[{nhan:"Mở Google Drive", url:"https://drive.google.com/drive/folders/1egqfodUFkrp8OTC6if1nyz4AC70SF9X7?usp=sharing"}] },
-    { mon:"Tin học", loai:"Bài giảng", nhanLoai:"Bài giảng Khối 5", ten:"Giáo án điện tử Tin học Khối 5",
-      tacGia:"Cô Nguyễn Thị Mai Quỳnh", nguon:"Google Drive Khối 5", drive:true,
-      links:[{nhan:"Mở Google Drive", url:"https://drive.google.com/drive/folders/1b7FepEmD_wZWvZCMB2a1BNqoZALf23nR?usp=sharing"}] },
-    { mon:"Tiếng Anh", loai:"Trò chơi", ten:"Trò chơi tương tác \"Word Match\" củng cố từ vựng Unit 4",
-      mota:"Chia sẻ từ kho giaoviendoimoi.com, giúp học sinh luyện tập từ vựng qua hình thức lật thẻ bài trực tuyến.",
-      tacGia:"giaoviendoimoi.com", nguon:"Trực tuyến",
-      links:[{nhan:"Mở trò chơi", url:"https://giaoviendoimoi.com/teacher-share/r6hwkkanvw6feqex9xlbk"}] },
-    { mon:"Tin học", loai:"Trò chơi", ten:"Quiz trắc nghiệm \"An toàn mạng thông minh\"",
-      mota:"Trò chơi trắc nghiệm tương tác giúp kiểm tra kiến thức về mật khẩu mạnh và phòng tránh rủi ro trên mạng.",
-      tacGia:"Wayground (Quizizz)", nguon:"Trực tuyến",
-      links:[{nhan:"Vào chơi", url:"https://wayground.com/join?gc=22121027&source=liveDashboard"}] }
-  ],
+      phieuTheoDoi: [
+        "Con làm xong bài tập về nhà của tuần",
+        "Con luyện gõ phím hoặc ôn từ vựng ít nhất 3 buổi",
+        "Con kể cho bố mẹ nghe một điều mới học được",
+        "Thời gian dùng máy mỗi ngày dưới 1 giờ",
+        "Con không chia sẻ thông tin cá nhân trên mạng"
+      ],
 
-  /* Học liệu học sinh – khoi: các khối dùng được; mau: orange | emerald | purple | green | blue */
-  hocSinh: [
-    { khoi:["5"], mon:"Tin học", nhanLoai:"Lập trình Scratch", icon:"fa-cat", mau:"orange",
-      ten:"Dự án Scratch Khối 5: Trò chơi \"Bảo vệ môi trường biển\"",
-      mota:"Sản phẩm lập trình nâng cao do học sinh Khối 5 thực hiện, tích hợp điều khiển nhân vật và tính điểm thông minh.",
-      the:["Scratch 3.0","Sáng tạo số"], links:[{nhan:"Chơi thử", url:"https://scratch.mit.edu/projects/1395030550"}] },
-    { khoi:["4"], mon:"Tin học", nhanLoai:"Lập trình Scratch", icon:"fa-cat", mau:"orange",
-      ten:"Dự án Scratch Khối 4: Hoạt hình kể chuyện \"Chú mèo thông minh\"",
-      mota:"Bài tập thực hành thiết kế hoạt hình, lồng tiếng Anh và tạo hiệu ứng chuyển động do học sinh Khối 4 sáng tạo.",
-      the:["Scratch","Hoạt hình"], links:[{nhan:"Xem hoạt hình", url:"https://scratch.mit.edu/projects/1395029345"}] },
-    { khoi:["4","5"], mon:"Tin học", nhanLoai:"Lập trình Scratch", icon:"fa-cat", mau:"orange",
-      ten:"Tự tạo dự án Scratch",
-      mota:"Mở trình soạn Scratch để thực hành bài trên lớp.",
-      ghiChu:"Muốn lưu bài cần tài khoản – nhờ thầy cô hoặc phụ huynh giúp.",
-      links:[{nhan:"Mở Editor Scratch", url:"https://scratch.mit.edu/projects/editor/"}] },
-    { khoi:["3","4","5"], mon:"Tiếng Anh", nhanLoai:"Luyện thi", mau:"emerald",
-      ten:"IOE & Học Liệu Số Global Success",
-      mota:"Sân thi đấu Olympic Tiếng Anh trực tuyến và kho học liệu điện tử chính thống.",
-      ghiChu:"Cần tài khoản IOE – phụ huynh đăng ký giúp con.",
-      links:[{nhan:"🌟 IOE", url:"https://ioe.vn/"}] },
-    { khoi:["3","4","5"], mon:"Tiếng Anh", nhanLoai:"Phát âm & Quốc tế", mau:"green",
-      ten:"Duolingo & Starfall Phonics",
-      mota:"Nền tảng học từ vựng, ngữ pháp qua trò chơi hàng ngày và luyện phát âm, ngữ âm cơ bản (Phonics).",
-      ghiChu:"Duolingo cần tài khoản – dùng cùng phụ huynh.",
-      links:[{nhan:"🦉 Duolingo", url:"https://www.duolingo.com/"}, {nhan:"⭐ Starfall", url:"https://www.starfall.com/", mau:"orange"}] },
-    { khoi:["5"], mon:"Tiếng Anh", nhanLoai:"Tiếng Anh Global Success", mau:"emerald",
-      ten:"Tiếng Anh Global Success lớp 5 - Luyện phát âm & Từ vựng Unit 1-5",
-      mota:"Sách điện tử có âm thanh trên hoclieu.vn: luyện phát âm và ôn tập từ vựng trọng tâm Unit 1-5.",
-      links:[{nhan:"Mở hoclieu.vn", url:"https://hoclieu.vn/"}] },
-    { khoi:["5"], mon:"Tin học", nhanLoai:"Tin học & Canva AI", mau:"purple",
-      ten:"Thực hành thiết kế Poster & Đồ họa trên Canva",
-      mota:"Truy cập Canva để học sinh lớp 5 tự tay thiết kế sản phẩm đồ họa và sáng tạo số.",
-      ghiChu:"Cần tài khoản – dùng tài khoản lớp do thầy cô cấp.",
-      links:[{nhan:"Vào Canva", url:"https://www.canva.com/"}] },
-    { khoi:["4"], mon:"Tiếng Anh", nhanLoai:"Tiếng Anh Global Success", mau:"emerald",
-      ten:"Tiếng Anh Global Success lớp 4 - Từ vựng & Mẫu câu",
-      mota:"Sách điện tử có âm thanh trên hoclieu.vn: luyện mẫu câu hỏi đáp theo chủ đề trường học và bạn bè.",
-      links:[{nhan:"Mở hoclieu.vn", url:"https://hoclieu.vn/"}] },
-    { khoi:["3"], mon:"Tiếng Anh", nhanLoai:"Tiếng Anh Global Success", mau:"emerald",
-      ten:"Tiếng Anh Global Success lớp 3 - Từ vựng qua hình ảnh",
-      mota:"Sách điện tử có âm thanh trên hoclieu.vn: học phát âm và ghi nhớ từ vựng qua hình ảnh sinh động.",
-      links:[{nhan:"Mở hoclieu.vn", url:"https://hoclieu.vn/"}] },
-    { khoi:["3"], mon:"Tin học", nhanLoai:"Tin học & Vẽ tranh", mau:"purple",
-      ten:"Vẽ tranh số & Luyện gõ 10 ngón",
-      mota:"Thực hành vẽ tranh trực tuyến trên Canva và luyện gõ chữ chuẩn xác tại tapdanhmay.vn.",
-      the:["Vẽ tranh","Gõ phím"],
-      links:[{nhan:"🎨 Vẽ Canva", url:"https://www.canva.com/vi_vn/ve/"}, {nhan:"⌨️ Tập đánh máy", url:"https://tapdanhmay.vn/", mau:"blue"}] }
-  ]
-};
+      /* Học liệu giáo viên – nguon: chữ nhỏ ở góc dưới trái thẻ */
+      giaoVien: [
+        {
+          mon: "Tiếng Anh", loai: "Bài giảng", ten: "Giáo án điện tử Global Success Lớp 5",
+          mota: "Được thiết kế chuẩn đổi mới phương pháp, tích hợp hình ảnh minh họa Canva AI và audio phát âm chuẩn.",
+          tacGia: "", nguon: "Sách trực tuyến",
+          links: [{ nhan: "Truy cập hoclieu.vn", url: "https://hoclieu.vn/" }]
+        },
+        {
+          mon: "Tin học", loai: "Bài giảng", nhanLoai: "Bài giảng Khối 3", ten: "Giáo án điện tử Tin học Khối 3",
+          tacGia: "Cô Nguyễn Thị Mai Quỳnh", nguon: "Google Drive Khối 3", drive: true,
+          links: [{ nhan: "Mở Google Drive", url: "https://drive.google.com/drive/folders/1QNkC_4xb5M7Wjcku-KGcTpeYvat84use?usp=sharing" }]
+        },
+        {
+          mon: "Tin học", loai: "Bài giảng", nhanLoai: "Bài giảng Khối 4", ten: "Giáo án điện tử Tin học Khối 4",
+          tacGia: "Cô Nguyễn Thị Mai Quỳnh", nguon: "Google Drive Khối 4", drive: true,
+          links: [{ nhan: "Mở Google Drive", url: "https://drive.google.com/drive/folders/1egqfodUFkrp8OTC6if1nyz4AC70SF9X7?usp=sharing" }]
+        },
+        {
+          mon: "Tin học", loai: "Bài giảng", nhanLoai: "Bài giảng Khối 5", ten: "Giáo án điện tử Tin học Khối 5",
+          tacGia: "Cô Nguyễn Thị Mai Quỳnh", nguon: "Google Drive Khối 5", drive: true,
+          links: [{ nhan: "Mở Google Drive", url: "https://drive.google.com/drive/folders/1b7FepEmD_wZWvZCMB2a1BNqoZALf23nR?usp=sharing" }]
+        },
+        {
+          mon: "Tiếng Anh", loai: "Trò chơi", ten: "Trò chơi tương tác \"Word Match\" củng cố từ vựng Unit 4",
+          mota: "Chia sẻ từ kho giaoviendoimoi.com, giúp học sinh luyện tập từ vựng qua hình thức lật thẻ bài trực tuyến.",
+          tacGia: "giaoviendoimoi.com", nguon: "Trực tuyến",
+          links: [{ nhan: "Mở trò chơi", url: "https://giaoviendoimoi.com/teacher-share/r6hwkkanvw6feqex9xlbk" }]
+        },
+        {
+          mon: "Tin học", loai: "Trò chơi", ten: "Quiz trắc nghiệm \"An toàn mạng thông minh\"",
+          mota: "Trò chơi trắc nghiệm tương tác giúp kiểm tra kiến thức về mật khẩu mạnh và phòng tránh rủi ro trên mạng.",
+          tacGia: "Wayground (Quizizz)", nguon: "Trực tuyến",
+          links: [{ nhan: "Vào chơi", url: "https://wayground.com/join?gc=22121027&source=liveDashboard" }]
+        }
+      ],
 
-/* =====================================================================
-   PHẦN XỬ LÝ – KHÔNG CẦN SỬA
-   ===================================================================== */
-const $ = s => document.querySelector(s);
-const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const store = {
-  get(k, d){ try{ const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); }catch(e){ return d; } },
-  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
-};
-const MAU = {
-  orange:"text-orange-700 hover:text-orange-900 bg-orange-50",
-  emerald:"text-emerald-700 hover:text-emerald-800 bg-emerald-50",
-  purple:"text-purple-700 hover:text-purple-900 bg-purple-50",
-  green:"text-green-700 hover:text-green-900 bg-green-50",
-  blue:"text-blue-700 hover:text-blue-900 bg-blue-50"
-};
-const KHOI_MAU = {"3":"bg-blue-50 text-blue-700","4":"bg-indigo-50 text-indigo-700","5":"bg-amber-50 text-amber-700"};
-const THE_MAU = ["bg-orange-100 text-orange-700","bg-blue-100 text-blue-700","bg-purple-100 text-purple-700"];
-const DANG_CAP_NHAT = `<span class="text-slate-400 font-bold text-sm flex items-center"><i class="fa-regular fa-clock mr-1.5"></i>Đang cập nhật</span>`;
+      /* Học liệu học sinh – khoi: các khối dùng được; mau: orange | emerald | purple | green | blue */
+      hocSinh: [
+        {
+          khoi: ["5"], mon: "Tin học", nhanLoai: "Lập trình Scratch", icon: "fa-cat", mau: "orange",
+          ten: "Dự án Scratch Khối 5: Trò chơi \"Bảo vệ môi trường biển\"",
+          mota: "Sản phẩm lập trình nâng cao do học sinh Khối 5 thực hiện, tích hợp điều khiển nhân vật và tính điểm thông minh.",
+          the: ["Scratch 3.0", "Sáng tạo số"], links: [{ nhan: "Chơi thử", url: "https://scratch.mit.edu/projects/1395030550" }]
+        },
+        {
+          khoi: ["4"], mon: "Tin học", nhanLoai: "Lập trình Scratch", icon: "fa-cat", mau: "orange",
+          ten: "Dự án Scratch Khối 4: Hoạt hình kể chuyện \"Chú mèo thông minh\"",
+          mota: "Bài tập thực hành thiết kế hoạt hình, lồng tiếng Anh và tạo hiệu ứng chuyển động do học sinh Khối 4 sáng tạo.",
+          the: ["Scratch", "Hoạt hình"], links: [{ nhan: "Xem hoạt hình", url: "https://scratch.mit.edu/projects/1395029345" }]
+        },
+        {
+          khoi: ["4", "5"], mon: "Tin học", nhanLoai: "Lập trình Scratch", icon: "fa-cat", mau: "orange",
+          ten: "Tự tạo dự án Scratch",
+          mota: "Mở trình soạn Scratch để thực hành bài trên lớp.",
+          ghiChu: "Muốn lưu bài cần tài khoản – nhờ thầy cô hoặc phụ huynh giúp.",
+          links: [{ nhan: "Mở Editor Scratch", url: "https://scratch.mit.edu/projects/editor/" }]
+        },
+        {
+          khoi: ["3", "4", "5"], mon: "Tiếng Anh", nhanLoai: "Luyện thi", mau: "emerald",
+          ten: "IOE & Học Liệu Số Global Success",
+          mota: "Sân thi đấu Olympic Tiếng Anh trực tuyến và kho học liệu điện tử chính thống.",
+          ghiChu: "Cần tài khoản IOE – phụ huynh đăng ký giúp con.",
+          links: [{ nhan: "🌟 IOE", url: "https://ioe.vn/" }]
+        },
+        {
+          khoi: ["3", "4", "5"], mon: "Tiếng Anh", nhanLoai: "Phát âm & Quốc tế", mau: "green",
+          ten: "Duolingo & Starfall Phonics",
+          mota: "Nền tảng học từ vựng, ngữ pháp qua trò chơi hàng ngày và luyện phát âm, ngữ âm cơ bản (Phonics).",
+          ghiChu: "Duolingo cần tài khoản – dùng cùng phụ huynh.",
+          links: [{ nhan: "🦉 Duolingo", url: "https://www.duolingo.com/" }, { nhan: "⭐ Starfall", url: "https://www.starfall.com/", mau: "orange" }]
+        },
+        {
+          khoi: ["5"], mon: "Tiếng Anh", nhanLoai: "Tiếng Anh Global Success", mau: "emerald",
+          ten: "Tiếng Anh Global Success lớp 5 - Luyện phát âm & Từ vựng Unit 1-5",
+          mota: "Sách điện tử có âm thanh trên hoclieu.vn: luyện phát âm và ôn tập từ vựng trọng tâm Unit 1-5.",
+          links: [{ nhan: "Mở hoclieu.vn", url: "https://hoclieu.vn/" }]
+        },
+        {
+          khoi: ["5"], mon: "Tin học", nhanLoai: "Tin học & Canva AI", mau: "purple",
+          ten: "Thực hành thiết kế Poster & Đồ họa trên Canva",
+          mota: "Truy cập Canva để học sinh lớp 5 tự tay thiết kế sản phẩm đồ họa và sáng tạo số.",
+          ghiChu: "Cần tài khoản – dùng tài khoản lớp do thầy cô cấp.",
+          links: [{ nhan: "Vào Canva", url: "https://www.canva.com/" }]
+        },
+        {
+          khoi: ["4"], mon: "Tiếng Anh", nhanLoai: "Tiếng Anh Global Success", mau: "emerald",
+          ten: "Tiếng Anh Global Success lớp 4 - Từ vựng & Mẫu câu",
+          mota: "Sách điện tử có âm thanh trên hoclieu.vn: luyện mẫu câu hỏi đáp theo chủ đề trường học và bạn bè.",
+          links: [{ nhan: "Mở hoclieu.vn", url: "https://hoclieu.vn/" }]
+        },
+        {
+          khoi: ["3"], mon: "Tiếng Anh", nhanLoai: "Tiếng Anh Global Success", mau: "emerald",
+          ten: "Tiếng Anh Global Success lớp 3 - Từ vựng qua hình ảnh",
+          mota: "Sách điện tử có âm thanh trên hoclieu.vn: học phát âm và ghi nhớ từ vựng qua hình ảnh sinh động.",
+          links: [{ nhan: "Mở hoclieu.vn", url: "https://hoclieu.vn/" }]
+        },
+        {
+          khoi: ["3"], mon: "Tin học", nhanLoai: "Tin học & Vẽ tranh", mau: "purple",
+          ten: "Vẽ tranh số & Luyện gõ 10 ngón",
+          mota: "Thực hành vẽ tranh trực tuyến trên Canva và luyện gõ chữ chuẩn xác tại tapdanhmay.vn.",
+          the: ["Vẽ tranh", "Gõ phím"],
+          links: [{ nhan: "🎨 Vẽ Canva", url: "https://www.canva.com/vi_vn/ve/" }, { nhan: "⌨️ Tập đánh máy", url: "https://tapdanhmay.vn/", mau: "blue" }]
+        }
+      ]
+    };
 
-/* ---- Tabs ---- */
-const TABS = ["giao-vien","hoc-sinh","phu-huynh"];
-const TAB_ON = {"giao-vien":"bg-white text-[#1e3a8a] shadow-md","hoc-sinh":"bg-emerald-700 text-white shadow-md","phu-huynh":"bg-purple-700 text-white shadow-md"};
-const TAB_OFF = "bg-blue-700/80 text-white hover:bg-blue-700";
-function showTab(id, push){
-  if(!TABS.includes(id)) id = "giao-vien";
-  TABS.forEach(t => {
-    $("#"+t).hidden = t !== id;
-    const b = $("#btn-"+t);
-    b.className = b.className.replace(/\s*(bg-\S+|text-white|text-\[#1e3a8a\]|shadow-md|hover:bg-\S+)/g, "") + " " + (t === id ? TAB_ON[t] : TAB_OFF);
-    b.setAttribute("aria-selected", t === id);
-  });
-  if(push) history.replaceState(null, "", "#"+id);
-}
-document.querySelectorAll(".tab-btn").forEach(b => b.addEventListener("click", () => { showTab(b.dataset.go, true); window.scrollTo({top:0}); }));
-window.addEventListener("hashchange", () => showTab(location.hash.slice(1)));
+    /* =====================================================================
+       PHẦN XỬ LÝ – KHÔNG CẦN SỬA
+       ===================================================================== */
+    const $ = s => document.querySelector(s);
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const store = {
+      get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+      set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } }
+    };
+    const MAU = {
+      orange: "text-orange-700 hover:text-orange-900 bg-orange-50",
+      emerald: "text-emerald-700 hover:text-emerald-800 bg-emerald-50",
+      purple: "text-purple-700 hover:text-purple-900 bg-purple-50",
+      green: "text-green-700 hover:text-green-900 bg-green-50",
+      blue: "text-blue-700 hover:text-blue-900 bg-blue-50"
+    };
+    const KHOI_MAU = { "3": "bg-blue-50 text-blue-700", "4": "bg-indigo-50 text-indigo-700", "5": "bg-amber-50 text-amber-700" };
+    const THE_MAU = ["bg-orange-100 text-orange-700", "bg-blue-100 text-blue-700", "bg-purple-100 text-purple-700"];
+    const DANG_CAP_NHAT = `<span class="text-slate-400 font-bold text-sm flex items-center"><i class="fa-regular fa-clock mr-1.5"></i>Đang cập nhật</span>`;
 
-/* ---- Bộ lọc ---- */
-const loc = {"gv-mon":"all","gv-loai":"all","hs-khoi":"all","hs-mon":"all","ph-khoi":store.get("xa-khoi","3")};
-const CHIP_ON = {"gv":"bg-primary text-white shadow-sm","hs":"bg-emerald-700 text-white shadow-sm","ph":"bg-purple-700 text-white shadow-sm"};
-const CHIP_OFF = "bg-slate-100 text-slate-600 hover:bg-slate-200";
-function paintChips(key){
-  document.querySelectorAll(`[data-filter="${key}"] .chip`).forEach(c => {
-    const on = c.dataset.val === loc[key];
-    c.className = "chip px-4 py-2 rounded-xl text-sm font-bold transition " + (on ? CHIP_ON[key.slice(0,2)] : CHIP_OFF);
-    c.setAttribute("aria-pressed", on);
-  });
-}
-document.querySelectorAll("[data-filter]").forEach(g => {
-  const key = g.dataset.filter;
-  g.querySelectorAll(".chip").forEach(c => c.addEventListener("click", () => setFilter(key, c.dataset.val)));
-  paintChips(key);
-});
-function setFilter(key, val){
-  loc[key] = val; paintChips(key);
-  if(key === "ph-khoi"){ store.set("xa-khoi", val); renderParent(); } else renderGrids();
-}
+    /* ---- Tabs ---- */
+    const TABS = ["giao-vien", "hoc-sinh", "phu-huynh"];
+    const TAB_ON = { "giao-vien": "bg-white text-[#1e3a8a] shadow-md", "hoc-sinh": "bg-emerald-700 text-white shadow-md", "phu-huynh": "bg-purple-700 text-white shadow-md" };
+    const TAB_OFF = "bg-blue-700/80 text-white hover:bg-blue-700";
+    function showTab(id, push) {
+      if (!TABS.includes(id)) id = "giao-vien";
+      TABS.forEach(t => {
+        $("#" + t).hidden = t !== id;
+        const b = $("#btn-" + t);
+        b.className = b.className.replace(/\s*(bg-\S+|text-white|text-\[#1e3a8a\]|shadow-md|hover:bg-\S+)/g, "") + " " + (t === id ? TAB_ON[t] : TAB_OFF);
+        b.setAttribute("aria-selected", t === id);
+      });
+      if (push) history.replaceState(null, "", "#" + id);
+    }
+    document.querySelectorAll(".tab-btn").forEach(b => b.addEventListener("click", () => { showTab(b.dataset.go, true); window.scrollTo({ top: 0 }); }));
+    window.addEventListener("hashchange", () => showTab(location.hash.slice(1)));
 
-/* ---- Thẻ ---- */
-const CARD = "bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-xl transition duration-300 flex flex-col justify-between p-6";
-const EMPTY = msg => `<div class="md:col-span-2 lg:col-span-3 text-center text-slate-500 bg-white border border-dashed border-slate-200 rounded-3xl p-10">${msg}</div>`;
+    /* ---- Bộ lọc ---- */
+    const loc = { "gv-mon": "all", "gv-loai": "all", "hs-khoi": "all", "hs-mon": "all", "ph-khoi": store.get("xa-khoi", "3") };
+    const CHIP_ON = { "gv": "bg-primary text-white shadow-sm", "hs": "bg-emerald-700 text-white shadow-sm", "ph": "bg-purple-700 text-white shadow-sm" };
+    const CHIP_OFF = "bg-slate-100 text-slate-600 hover:bg-slate-200";
+    function paintChips(key) {
+      document.querySelectorAll(`[data-filter="${key}"] .chip`).forEach(c => {
+        const on = c.dataset.val === loc[key];
+        c.className = "chip px-4 py-2 rounded-xl text-sm font-bold transition " + (on ? CHIP_ON[key.slice(0, 2)] : CHIP_OFF);
+        c.setAttribute("aria-pressed", on);
+      });
+    }
+    document.querySelectorAll("[data-filter]").forEach(g => {
+      const key = g.dataset.filter;
+      g.querySelectorAll(".chip").forEach(c => c.addEventListener("click", () => setFilter(key, c.dataset.val)));
+      paintChips(key);
+    });
+    function setFilter(key, val) {
+      loc[key] = val; paintChips(key);
+      if (key === "ph-khoi") { store.set("xa-khoi", val); renderParent(); } else renderGrids();
+    }
 
-function gvLinks(links){
-  const real = links.filter(l => l.url);
-  if(!real.length) return DANG_CAP_NHAT;
-  return `<div class="flex flex-wrap gap-3 justify-end">` + real.map(l =>
-    `<a href="${esc(l.url)}" target="_blank" rel="noopener" class="text-primary hover:text-blue-700 font-bold text-sm flex items-center group">${esc(l.nhan)} <i class="fa-solid fa-external-link ml-1.5 group-hover:translate-x-0.5 transition"></i></a>`
-  ).join("") + `</div>`;
-}
-function hsLinks(r){
-  const real = r.links.filter(l => l.url);
-  if(!real.length) return DANG_CAP_NHAT;
-  return `<div class="flex flex-wrap gap-2 justify-end">` + real.map(l =>
-    `<a href="${esc(l.url)}" target="_blank" rel="noopener" class="${MAU[l.mau || r.mau] || MAU.emerald} font-bold text-xs flex items-center px-3 py-2 rounded-xl">${esc(l.nhan)} <i class="fa-solid fa-external-link ml-1"></i></a>`
-  ).join("") + `</div>`;
-}
+    /* ---- Thẻ ---- */
+    const CARD = "bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-xl transition duration-300 flex flex-col justify-between p-6";
+    const EMPTY = msg => `<div class="md:col-span-2 lg:col-span-3 text-center text-slate-500 bg-white border border-dashed border-slate-200 rounded-3xl p-10">${msg}</div>`;
 
-function renderGrids(){
-  const gv = CAU_HINH.giaoVien.filter(r =>
-    (loc["gv-mon"] === "all" || r.mon === loc["gv-mon"]) && (loc["gv-loai"] === "all" || r.loai === loc["gv-loai"]));
-  $("#grid-gv").innerHTML = gv.length ? gv.map(r => {
-    const anh = r.mon === "Tiếng Anh", game = r.loai === "Trò chơi";
-    return `<div class="${CARD}">
+    function gvLinks(links) {
+      const real = links.filter(l => l.url);
+      if (!real.length) return DANG_CAP_NHAT;
+      return `<div class="flex flex-wrap gap-3 justify-end">` + real.map(l =>
+        `<a href="${esc(l.url)}" target="_blank" rel="noopener" class="text-primary hover:text-blue-700 font-bold text-sm flex items-center group">${esc(l.nhan)} <i class="fa-solid fa-external-link ml-1.5 group-hover:translate-x-0.5 transition"></i></a>`
+      ).join("") + `</div>`;
+    }
+    function hsLinks(r) {
+      const real = r.links.filter(l => l.url);
+      if (!real.length) return DANG_CAP_NHAT;
+      return `<div class="flex flex-wrap gap-2 justify-end">` + real.map(l =>
+        `<a href="${esc(l.url)}" target="_blank" rel="noopener" class="${MAU[l.mau || r.mau] || MAU.emerald} font-bold text-xs flex items-center px-3 py-2 rounded-xl">${esc(l.nhan)} <i class="fa-solid fa-external-link ml-1"></i></a>`
+      ).join("") + `</div>`;
+    }
+
+    function renderGrids() {
+      const gv = CAU_HINH.giaoVien.filter(r =>
+        (loc["gv-mon"] === "all" || r.mon === loc["gv-mon"]) && (loc["gv-loai"] === "all" || r.loai === loc["gv-loai"]));
+      $("#grid-gv").innerHTML = gv.length ? gv.map(r => {
+        const anh = r.mon === "Tiếng Anh", game = r.loai === "Trò chơi";
+        return `<div class="${CARD}">
       <div>
         <div class="flex justify-between items-center mb-3 gap-2">
           <span class="text-xs font-extrabold px-3 py-1 ${anh ? "bg-blue-50 text-blue-700" : "bg-purple-50 text-purple-700"} rounded-full">${anh ? "Tiếng Anh" : "Tin học & AI"}</span>
@@ -462,14 +576,14 @@ function renderGrids(){
         ${gvLinks(r.links)}
       </div>
     </div>`;
-  }).join("") : EMPTY("Chưa có học liệu phù hợp. Thầy cô hãy chọn bộ lọc khác.");
+      }).join("") : EMPTY("Chưa có học liệu phù hợp. Thầy cô hãy chọn bộ lọc khác.");
 
-  const hs = CAU_HINH.hocSinh.filter(r =>
-    (loc["hs-khoi"] === "all" || r.khoi.includes(loc["hs-khoi"])) && (loc["hs-mon"] === "all" || r.mon === loc["hs-mon"]));
-  $("#grid-hs").innerHTML = hs.length ? hs.map(r => {
-    const nhieuKhoi = r.khoi.length > 1;
-    const loaiMau = r.mau === "orange" ? "bg-orange-50 text-orange-700" : (r.mon === "Tiếng Anh" ? "bg-blue-50 text-blue-700" : "bg-purple-50 text-purple-700");
-    return `<div class="${CARD}">
+      const hs = CAU_HINH.hocSinh.filter(r =>
+        (loc["hs-khoi"] === "all" || r.khoi.includes(loc["hs-khoi"])) && (loc["hs-mon"] === "all" || r.mon === loc["hs-mon"]));
+      $("#grid-hs").innerHTML = hs.length ? hs.map(r => {
+        const nhieuKhoi = r.khoi.length > 1;
+        const loaiMau = r.mau === "orange" ? "bg-orange-50 text-orange-700" : (r.mon === "Tiếng Anh" ? "bg-blue-50 text-blue-700" : "bg-purple-50 text-purple-700");
+        return `<div class="${CARD}">
       <div>
         <div class="flex justify-between items-center mb-3 gap-2">
           <span class="text-xs font-extrabold px-3 py-1 ${nhieuKhoi ? "bg-emerald-50 text-emerald-700" : KHOI_MAU[r.khoi[0]]} rounded-full">Khối ${r.khoi.join("-")}</span>
@@ -477,7 +591,7 @@ function renderGrids(){
         </div>
         <h3 class="font-bold text-lg text-slate-800 leading-snug">${esc(r.ten)}</h3>
         <p class="text-sm text-slate-500 mt-2 leading-relaxed">${esc(r.mota)}</p>
-        ${r.the ? `<div class="mt-4 flex items-center text-xs space-x-2 flex-wrap gap-y-1">${r.the.map((t,i) => `<span class="${THE_MAU[i % 3]} px-2 py-0.5 rounded font-bold">${esc(t)}</span>`).join("")}</div>` : ""}
+        ${r.the ? `<div class="mt-4 flex items-center text-xs space-x-2 flex-wrap gap-y-1">${r.the.map((t, i) => `<span class="${THE_MAU[i % 3]} px-2 py-0.5 rounded font-bold">${esc(t)}</span>`).join("")}</div>` : ""}
         ${r.ghiChu ? `<p class="mt-3 text-xs text-amber-800 bg-amber-50 border-l-4 border-amber-400 px-3 py-2 rounded-lg"><i class="fa-solid fa-key mr-1"></i> ${esc(r.ghiChu)}</p>` : ""}
       </div>
       <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center gap-3">
@@ -485,145 +599,165 @@ function renderGrids(){
         ${hsLinks(r)}
       </div>
     </div>`;
-  }).join("") : EMPTY("Chưa có học liệu cho lựa chọn này. Em thử chọn môn hoặc khối khác nhé.");
-}
+      }).join("") : EMPTY("Chưa có học liệu cho lựa chọn này. Em thử chọn môn hoặc khối khác nhé.");
+    }
 
-/* ---- Phụ huynh ---- */
-function renderParent(){
-  const k = loc["ph-khoi"], t = CAU_HINH.tuanNay, w = t[k] || {};
-  $("#week-label").textContent = t.nhan + " – Khối " + k;
-  const o = (icon, mau, ten, nd) => `<div class="bg-slate-50 rounded-2xl p-4 border border-slate-100"><p class="text-xs font-bold ${mau} mb-1"><i class="fa-solid ${icon} mr-1"></i>${ten}</p><p class="text-sm text-slate-700">${esc(nd)}</p></div>`;
-  $("#week-box").innerHTML =
-    o("fa-laptop-code","text-purple-700","Tin học", w.tinHoc || "Thầy cô đang cập nhật.") +
-    o("fa-language","text-blue-700","Tiếng Anh", w.tiengAnh || "Thầy cô đang cập nhật.") +
-    o("fa-house","text-amber-700","Bài tập ở nhà", w.baiTapNha || "Không có bài tập.");
-  $("#week-actions").innerHTML =
-    (w.linkBaiTap ? `<a href="${esc(w.linkBaiTap)}" target="_blank" rel="noopener" class="bg-purple-700 hover:bg-purple-800 text-white px-4 py-2 rounded-xl font-bold text-sm flex items-center">Mở bài tập <i class="fa-solid fa-external-link ml-1.5"></i></a>` : "") +
-    `<button id="btn-xem-khoi" class="bg-purple-50 hover:bg-purple-100 text-purple-700 px-4 py-2 rounded-xl font-bold text-sm">Xem học liệu Khối ${k}</button>`;
-  $("#btn-xem-khoi").onclick = () => showStudentGrade(k);
+    /* ---- Phụ huynh ---- */
+    function renderParent() {
+      const k = loc["ph-khoi"], t = CAU_HINH.tuanNay, w = t[k] || {};
+      $("#week-label").textContent = t.nhan + " – Khối " + k;
+      const o = (icon, mau, ten, nd) => `<div class="bg-slate-50 rounded-2xl p-4 border border-slate-100"><p class="text-xs font-bold ${mau} mb-1"><i class="fa-solid ${icon} mr-1"></i>${ten}</p><p class="text-sm text-slate-700">${esc(nd)}</p></div>`;
+      $("#week-box").innerHTML =
+        o("fa-laptop-code", "text-purple-700", "Tin học", w.tinHoc || "Thầy cô đang cập nhật.") +
+        o("fa-language", "text-blue-700", "Tiếng Anh", w.tiengAnh || "Thầy cô đang cập nhật.") +
+        o("fa-house", "text-amber-700", "Bài tập ở nhà", w.baiTapNha || "Không có bài tập.");
+      $("#week-actions").innerHTML =
+        (w.linkBaiTap ? `<a href="${esc(w.linkBaiTap)}" target="_blank" rel="noopener" class="bg-purple-700 hover:bg-purple-800 text-white px-4 py-2 rounded-xl font-bold text-sm flex items-center">Mở bài tập <i class="fa-solid fa-external-link ml-1.5"></i></a>` : "") +
+        `<button id="btn-xem-khoi" class="bg-purple-50 hover:bg-purple-100 text-purple-700 px-4 py-2 rounded-xl font-bold text-sm">Xem học liệu Khối ${k}</button>`;
+      $("#btn-xem-khoi").onclick = () => showStudentGrade(k);
 
-  const key = "xa-phieu-" + k + "-" + t.nhan;
-  const done = store.get(key, []);
-  $("#checklist").innerHTML = CAU_HINH.phieuTheoDoi.map((it, i) => `
+      const key = "xa-phieu-" + k + "-" + t.nhan;
+      const done = store.get(key, []);
+      $("#checklist").innerHTML = CAU_HINH.phieuTheoDoi.map((it, i) => `
     <li><label class="flex gap-3 items-start p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50">
       <input type="checkbox" class="chk w-5 h-5 mt-0.5 accent-purple-700 flex-none" data-i="${i}" ${done.includes(i) ? "checked" : ""}>
       <span class="text-sm text-slate-700">${esc(it)}</span></label></li>`).join("");
-  const update = () => {
-    const ticked = [...document.querySelectorAll("#checklist input:checked")].map(x => +x.dataset.i);
-    store.set(key, ticked);
-    const n = CAU_HINH.phieuTheoDoi.length;
-    $("#bar").style.width = (ticked.length / n * 100) + "%";
-    $("#progress-text").textContent = ticked.length === n ? "🎉 Con đã hoàn thành tất cả. Hãy khen con nhé!" : `Đã hoàn thành ${ticked.length}/${n} việc.`;
-  };
-  document.querySelectorAll("#checklist input").forEach(x => x.addEventListener("change", update));
-  $("#btn-reset").onclick = () => { document.querySelectorAll("#checklist input").forEach(x => x.checked = false); update(); };
-  update();
+      const update = () => {
+        const ticked = [...document.querySelectorAll("#checklist input:checked")].map(x => +x.dataset.i);
+        store.set(key, ticked);
+        const n = CAU_HINH.phieuTheoDoi.length;
+        $("#bar").style.width = (ticked.length / n * 100) + "%";
+        $("#progress-text").textContent = ticked.length === n ? "🎉 Con đã hoàn thành tất cả. Hãy khen con nhé!" : `Đã hoàn thành ${ticked.length}/${n} việc.`;
+      };
+      document.querySelectorAll("#checklist input").forEach(x => x.addEventListener("change", update));
+      $("#btn-reset").onclick = () => { document.querySelectorAll("#checklist input").forEach(x => x.checked = false); update(); };
+      update();
 
-  const z = CAU_HINH.zalo[k];
-  $("#contact-box").innerHTML = z
-    ? `<a href="${esc(z)}" target="_blank" rel="noopener" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm"><i class="fa-solid fa-comments mr-2"></i>Vào nhóm Zalo Khối ${k}</a>`
-    : `<p class="text-sm text-slate-500 bg-slate-50 rounded-xl p-3">Nhóm Zalo Khối ${k} đang được cập nhật. Phụ huynh vui lòng liên hệ trực tiếp giáo viên chủ nhiệm.</p>`;
-}
-function showStudentGrade(k){ showTab("hoc-sinh", true); loc["hs-mon"] = "all"; paintChips("hs-mon"); setFilter("hs-khoi", k); window.scrollTo({top:0}); }
+      const z = CAU_HINH.zalo[k];
+      $("#contact-box").innerHTML = z
+        ? `<a href="${esc(z)}" target="_blank" rel="noopener" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm"><i class="fa-solid fa-comments mr-2"></i>Vào nhóm Zalo Khối ${k}</a>`
+        : `<p class="text-sm text-slate-500 bg-slate-50 rounded-xl p-3">Nhóm Zalo Khối ${k} đang được cập nhật. Phụ huynh vui lòng liên hệ trực tiếp giáo viên chủ nhiệm.</p>`;
+    }
+    function showStudentGrade(k) { showTab("hoc-sinh", true); loc["hs-mon"] = "all"; paintChips("hs-mon"); setFilter("hs-khoi", k); window.scrollTo({ top: 0 }); }
 
-/* ---- Đóng góp học liệu ---- */
-const modal = $("#uploadModal");
-$("#btn-gui").onclick = () => CAU_HINH.formGuiHocLieu ? window.open(CAU_HINH.formGuiHocLieu, "_blank", "noopener") : modal.classList.remove("hidden");
-$("#modal-close").onclick = $("#modal-ok").onclick = () => modal.classList.add("hidden");
+    /* ---- Đóng góp học liệu ---- */
+    const modal = $("#uploadModal");
+    $("#btn-gui").onclick = () => CAU_HINH.formGuiHocLieu ? window.open(CAU_HINH.formGuiHocLieu, "_blank", "noopener") : modal.classList.remove("hidden");
+    $("#modal-close").onclick = $("#modal-ok").onclick = () => modal.classList.add("hidden");
 
-/* ---- Trợ lý (trả lời theo từ khóa, không gửi dữ liệu ra ngoài) ---- */
-const norm = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/đ/g,"d");
-const KB = [
-  { k:["phu huynh","bo me","con toi","con em","giam sat","theo doi"],
-    a:"Phụ huynh vào mục Phụ huynh để xem con học gì trong tuần, đánh dấu phiếu theo dõi và vào nhóm Zalo của khối.",
-    go:[["Mở mục Phụ huynh", () => showTab("phu-huynh", true)]] },
-  { k:["scratch","lap trinh"],
-    a:"Scratch dành cho Khối 4, 5. Em có thể xem sản phẩm của các bạn hoặc tự mở Scratch để thực hành.\nMẹo: làm nhân vật di chuyển trước, sau đó mới thêm điểm số và âm thanh.",
-    go:[["Scratch Khối 4", () => {showStudentGrade("4"); setFilter("hs-mon","Tin học");}], ["Khối 5", () => {showStudentGrade("5"); setFilter("hs-mon","Tin học");}]] },
-  { k:["go phim","danh may","10 ngon","ban phim"],
-    a:"Đặt hai ngón trỏ lên phím F và J (có gờ nổi). Gõ chậm mà đúng trước, nhanh sau. Mỗi ngày tập 10 phút là đủ.",
-    go:[["Mở trang tập gõ", () => window.open("https://tapdanhmay.vn/","_blank","noopener")]] },
-  { k:["mat khau","an toan","lua dao","nguoi la","bat nat"],
-    a:"Ba điều cần nhớ:\n1. Mật khẩu dài, có chữ hoa, chữ thường và số; không cho bạn bè biết.\n2. Không gửi tên, địa chỉ, ảnh cho người lạ.\n3. Gặp tin nhắn lạ hoặc bị trêu chọc trên mạng: kể ngay với bố mẹ hoặc thầy cô." },
-  { k:["ioe","olympic","thi tieng anh"],
-    a:"IOE là sân chơi Olympic Tiếng Anh trực tuyến cho Khối 3, 4, 5. Phụ huynh đăng ký tài khoản giúp con trên ioe.vn.",
-    go:[["Mở IOE", () => window.open("https://ioe.vn/","_blank","noopener")]] },
-  { k:["tro choi","game","choi"],
-    a:"Thầy cô xem mục Giáo viên → Trò chơi đổi mới. Học sinh xem Góc Học Tập Số và chọn khối của mình.",
-    go:[["Trò chơi cho GV", () => {showTab("giao-vien", true); setFilter("gv-loai","Trò chơi");}], ["Góc học sinh", () => showTab("hoc-sinh", true)]] },
-  { k:["giao an","bai giang","ke hoach bai day","drive"],
-    a:"Giáo án Tin học Khối 3, 4, 5 và Tiếng Anh lớp 5 nằm ở mục Giáo viên → Bài giảng.",
-    go:[["Xem bài giảng", () => {showTab("giao-vien", true); setFilter("gv-loai","Bài giảng");}]] },
-  { k:["tieng anh","global success","tu vung","phat am","english"],
-    a:"Sách Global Success có âm thanh trên hoclieu.vn. Mỗi ngày em nghe và đọc to 5 từ mới là nhớ rất nhanh.",
-    go:[["Khối 3", () => {showStudentGrade("3"); setFilter("hs-mon","Tiếng Anh");}], ["Khối 4", () => {showStudentGrade("4"); setFilter("hs-mon","Tiếng Anh");}], ["Khối 5", () => {showStudentGrade("5"); setFilter("hs-mon","Tiếng Anh");}]] },
-  { k:["canva","ve tranh","poster","thiet ke"],
-    a:"Khối 3 vẽ tranh tự do trên Canva. Khối 5 thiết kế poster bằng tài khoản lớp do thầy cô cấp.",
-    go:[["Học liệu Tin học", () => {showTab("hoc-sinh", true); setFilter("hs-mon","Tin học");}]] },
-  { k:["gui","dong gop","chia se","tai len","upload"],
-    a:"Thầy cô bấm nút “Đóng góp Bài giảng / Trò chơi” ở mục Giáo viên để gửi bài qua biểu mẫu của trường.",
-    go:[["Mở mục Giáo viên", () => showTab("giao-vien", true)]] }
-];
-const box = $("#chat-messages");
-function addMsg(text, who, actions){
-  const row = document.createElement("div");
-  row.className = who === "me" ? "flex justify-end" : "flex items-start space-x-2";
-  if(who !== "me") row.innerHTML = `<div class="bg-blue-600 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs flex-shrink-0 shadow"><i class="fa-solid fa-robot"></i></div>`;
-  const b = document.createElement("div");
-  b.className = who === "me"
-    ? "bg-blue-600 text-white p-3 rounded-2xl shadow-sm max-w-[80%] whitespace-pre-line"
-    : "bg-white p-3 rounded-2xl shadow-sm border border-slate-100 text-slate-700 max-w-[85%] leading-relaxed whitespace-pre-line";
-  b.textContent = text;
-  if(actions && actions.length){
-    const wrap = document.createElement("div");
-    wrap.className = "mt-2 flex flex-wrap gap-1.5";
-    actions.forEach(([label, fn]) => {
-      const a = document.createElement("button");
-      a.type = "button"; a.textContent = label;
-      a.className = "bg-blue-50 text-blue-700 hover:bg-blue-100 px-3 py-1.5 rounded-xl font-bold text-xs";
-      a.onclick = () => { fn(); if(window.innerWidth < 768) toggleChat(false); };
-      wrap.appendChild(a);
+    /* ---- Trợ lý (trả lời theo từ khóa, không gửi dữ liệu ra ngoài) ---- */
+    const norm = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d");
+    const KB = [
+      {
+        k: ["phu huynh", "bo me", "con toi", "con em", "giam sat", "theo doi"],
+        a: "Phụ huynh vào mục Phụ huynh để xem con học gì trong tuần, đánh dấu phiếu theo dõi và vào nhóm Zalo của khối.",
+        go: [["Mở mục Phụ huynh", () => showTab("phu-huynh", true)]]
+      },
+      {
+        k: ["scratch", "lap trinh"],
+        a: "Scratch dành cho Khối 4, 5. Em có thể xem sản phẩm của các bạn hoặc tự mở Scratch để thực hành.\nMẹo: làm nhân vật di chuyển trước, sau đó mới thêm điểm số và âm thanh.",
+        go: [["Scratch Khối 4", () => { showStudentGrade("4"); setFilter("hs-mon", "Tin học"); }], ["Khối 5", () => { showStudentGrade("5"); setFilter("hs-mon", "Tin học"); }]]
+      },
+      {
+        k: ["go phim", "danh may", "10 ngon", "ban phim"],
+        a: "Đặt hai ngón trỏ lên phím F và J (có gờ nổi). Gõ chậm mà đúng trước, nhanh sau. Mỗi ngày tập 10 phút là đủ.",
+        go: [["Mở trang tập gõ", () => window.open("https://tapdanhmay.vn/", "_blank", "noopener")]]
+      },
+      {
+        k: ["mat khau", "an toan", "lua dao", "nguoi la", "bat nat"],
+        a: "Ba điều cần nhớ:\n1. Mật khẩu dài, có chữ hoa, chữ thường và số; không cho bạn bè biết.\n2. Không gửi tên, địa chỉ, ảnh cho người lạ.\n3. Gặp tin nhắn lạ hoặc bị trêu chọc trên mạng: kể ngay với bố mẹ hoặc thầy cô."
+      },
+      {
+        k: ["ioe", "olympic", "thi tieng anh"],
+        a: "IOE là sân chơi Olympic Tiếng Anh trực tuyến cho Khối 3, 4, 5. Phụ huynh đăng ký tài khoản giúp con trên ioe.vn.",
+        go: [["Mở IOE", () => window.open("https://ioe.vn/", "_blank", "noopener")]]
+      },
+      {
+        k: ["tro choi", "game", "choi"],
+        a: "Thầy cô xem mục Giáo viên → Trò chơi đổi mới. Học sinh xem Góc Học Tập Số và chọn khối của mình.",
+        go: [["Trò chơi cho GV", () => { showTab("giao-vien", true); setFilter("gv-loai", "Trò chơi"); }], ["Góc học sinh", () => showTab("hoc-sinh", true)]]
+      },
+      {
+        k: ["giao an", "bai giang", "ke hoach bai day", "drive"],
+        a: "Giáo án Tin học Khối 3, 4, 5 và Tiếng Anh lớp 5 nằm ở mục Giáo viên → Bài giảng.",
+        go: [["Xem bài giảng", () => { showTab("giao-vien", true); setFilter("gv-loai", "Bài giảng"); }]]
+      },
+      {
+        k: ["tieng anh", "global success", "tu vung", "phat am", "english"],
+        a: "Sách Global Success có âm thanh trên hoclieu.vn. Mỗi ngày em nghe và đọc to 5 từ mới là nhớ rất nhanh.",
+        go: [["Khối 3", () => { showStudentGrade("3"); setFilter("hs-mon", "Tiếng Anh"); }], ["Khối 4", () => { showStudentGrade("4"); setFilter("hs-mon", "Tiếng Anh"); }], ["Khối 5", () => { showStudentGrade("5"); setFilter("hs-mon", "Tiếng Anh"); }]]
+      },
+      {
+        k: ["canva", "ve tranh", "poster", "thiet ke"],
+        a: "Khối 3 vẽ tranh tự do trên Canva. Khối 5 thiết kế poster bằng tài khoản lớp do thầy cô cấp.",
+        go: [["Học liệu Tin học", () => { showTab("hoc-sinh", true); setFilter("hs-mon", "Tin học"); }]]
+      },
+      {
+        k: ["gui", "dong gop", "chia se", "tai len", "upload"],
+        a: "Thầy cô bấm nút “Đóng góp Bài giảng / Trò chơi” ở mục Giáo viên để gửi bài qua biểu mẫu của trường.",
+        go: [["Mở mục Giáo viên", () => showTab("giao-vien", true)]]
+      }
+    ];
+    const box = $("#chat-messages");
+    function addMsg(text, who, actions) {
+      const row = document.createElement("div");
+      row.className = who === "me" ? "flex justify-end" : "flex items-start space-x-2";
+      if (who !== "me") row.innerHTML = `<div class="bg-blue-600 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs flex-shrink-0 shadow"><i class="fa-solid fa-robot"></i></div>`;
+      const b = document.createElement("div");
+      b.className = who === "me"
+        ? "bg-blue-600 text-white p-3 rounded-2xl shadow-sm max-w-[80%] whitespace-pre-line"
+        : "bg-white p-3 rounded-2xl shadow-sm border border-slate-100 text-slate-700 max-w-[85%] leading-relaxed whitespace-pre-line";
+      b.textContent = text;
+      if (actions && actions.length) {
+        const wrap = document.createElement("div");
+        wrap.className = "mt-2 flex flex-wrap gap-1.5";
+        actions.forEach(([label, fn]) => {
+          const a = document.createElement("button");
+          a.type = "button"; a.textContent = label;
+          a.className = "bg-blue-50 text-blue-700 hover:bg-blue-100 px-3 py-1.5 rounded-xl font-bold text-xs";
+          a.onclick = () => { fn(); if (window.innerWidth < 768) toggleChat(false); };
+          wrap.appendChild(a);
+        });
+        b.appendChild(wrap);
+      }
+      row.appendChild(b);
+      box.appendChild(row);
+      box.scrollTop = box.scrollHeight;
+    }
+    function answer(q) {
+      addMsg(q, "me");
+      const n = norm(q), hit = KB.find(e => e.k.some(w => n.includes(w)));
+      setTimeout(() => hit ? addMsg(hit.a, "bot", hit.go)
+        : addMsg("Mình chưa có câu trả lời cho câu hỏi này. Hãy thử hỏi về: Scratch, gõ phím, tiếng Anh, an toàn mạng, IOE… hoặc hỏi trực tiếp thầy cô nhé.", "bot"), 400);
+    }
+    function toggleChat(open) {
+      const w = $("#chat-window"), willOpen = open ?? w.hidden;
+      w.hidden = !willOpen;
+      $("#chat-toggle-btn").setAttribute("aria-expanded", willOpen);
+      if (willOpen && !box.children.length)
+        addMsg("Xin chào thầy cô, phụ huynh và các em! Em là Trợ lý Xuân An. Hãy chọn câu hỏi gợi ý bên dưới hoặc gõ câu hỏi nhé! 🤖✨", "bot");
+    }
+    $("#chat-toggle-btn").onclick = () => toggleChat();
+    $("#chat-close").onclick = () => toggleChat(false);
+    document.addEventListener("keydown", e => { if (e.key === "Escape") { toggleChat(false); modal.classList.add("hidden"); } });
+    $("#chat-form").addEventListener("submit", e => {
+      e.preventDefault();
+      const v = $("#chat-input").value.trim();
+      if (v) { answer(v); $("#chat-input").value = ""; }
     });
-    b.appendChild(wrap);
-  }
-  row.appendChild(b);
-  box.appendChild(row);
-  box.scrollTop = box.scrollHeight;
-}
-function answer(q){
-  addMsg(q, "me");
-  const n = norm(q), hit = KB.find(e => e.k.some(w => n.includes(w)));
-  setTimeout(() => hit ? addMsg(hit.a, "bot", hit.go)
-    : addMsg("Mình chưa có câu trả lời cho câu hỏi này. Hãy thử hỏi về: Scratch, gõ phím, tiếng Anh, an toàn mạng, IOE… hoặc hỏi trực tiếp thầy cô nhé.", "bot"), 400);
-}
-function toggleChat(open){
-  const w = $("#chat-window"), willOpen = open ?? w.hidden;
-  w.hidden = !willOpen;
-  $("#chat-toggle-btn").setAttribute("aria-expanded", willOpen);
-  if(willOpen && !box.children.length)
-    addMsg("Xin chào thầy cô, phụ huynh và các em! Em là Trợ lý Xuân An. Hãy chọn câu hỏi gợi ý bên dưới hoặc gõ câu hỏi nhé! 🤖✨", "bot");
-}
-$("#chat-toggle-btn").onclick = () => toggleChat();
-$("#chat-close").onclick = () => toggleChat(false);
-document.addEventListener("keydown", e => { if(e.key === "Escape"){ toggleChat(false); modal.classList.add("hidden"); } });
-$("#chat-form").addEventListener("submit", e => {
-  e.preventDefault();
-  const v = $("#chat-input").value.trim();
-  if(v){ answer(v); $("#chat-input").value = ""; }
-});
-[["💡","Trò chơi từ vựng"],["🐱","Lập trình Scratch"],["⌨️","Luyện gõ phím"],["🛡️","An toàn trên mạng"],["👨‍👩‍👧","Dành cho phụ huynh"]].forEach(([ic, q]) => {
-  const b = document.createElement("button");
-  b.type = "button"; b.textContent = ic + " " + q;
-  b.className = "bg-white px-3 py-1.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-blue-50 hover:text-blue-700 whitespace-nowrap transition font-medium shadow-sm";
-  b.onclick = () => answer(q);
-  $("#quick").appendChild(b);
-});
+    [["💡", "Trò chơi từ vựng"], ["🐱", "Lập trình Scratch"], ["⌨️", "Luyện gõ phím"], ["🛡️", "An toàn trên mạng"], ["👨‍👩‍👧", "Dành cho phụ huynh"]].forEach(([ic, q]) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.textContent = ic + " " + q;
+      b.className = "bg-white px-3 py-1.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-blue-50 hover:text-blue-700 whitespace-nowrap transition font-medium shadow-sm";
+      b.onclick = () => answer(q);
+      $("#quick").appendChild(b);
+    });
 
-/* ---- Khởi động ---- */
-renderGrids();
-renderParent();
-showTab(location.hash.slice(1) || "giao-vien");
-</script>
+    /* ---- Khởi động ---- */
+    renderGrids();
+    renderParent();
+    showTab(location.hash.slice(1) || "giao-vien");
+  </script>
 </body>
 
 </html>
